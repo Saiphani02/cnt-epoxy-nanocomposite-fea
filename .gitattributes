@@ -1,3 +1,2 @@
-# Supporting automation and calculation scripts are excluded from language statistics.
-# Engineering tools and the full workflow are documented in README.md.
-*.py linguist-detectable=false
+*.step -text
+*.mp4 binary

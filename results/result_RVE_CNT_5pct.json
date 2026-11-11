@@ -1,0 +1,37 @@
+{
+ "nodes": 65590, 
+ "tag": "RVE_CNT_5pct", 
+ "n_fibres": 29, 
+ "unmatched_faces": 0, 
+ "reaction_N": 606.51914015980321, 
+ "elements": 25199, 
+ "messages": [], 
+ "Normal stress X": {
+  "max": 338.3681640625, 
+  "min": -140.85910542805991
+ }, 
+ "E_eff_GPa": 6.065191401598032, 
+ "faces": [
+  "X0", 
+  "X1", 
+  "Y0", 
+  "Y1", 
+  "Z0", 
+  "Z1"
+ ], 
+ "Von Mises": {
+  "max": 440.76910053777482, 
+  "min": 0.22680157461618888
+ }, 
+ "Von Mises CNTs": {
+  "max": 440.76910053777482, 
+  "min": 1.9032963662566649
+ }, 
+ "status": "Done", 
+ "Total deformation": {
+  "max": 0.012083226085762216, 
+  "min": 0.0
+ }, 
+ "bodies": 30, 
+ "contacts": 29
+}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<EngineeringData version="24.2.0.0">
+  <Notes />
+  <Materials>
+    <MatML_Doc>
+      <Material>
+        <BulkDetails>
+          <Name>Epoxy RVE</Name>
+          <PropertyData property="pr0"><Data format="string">-</Data><Qualifier name="Field Variable Compatible">Temperature</Qualifier>
+            <ParameterValue parameter="pa0" format="float"><Data>1200</Data><Qualifier name="Variable Type">Dependent</Qualifier></ParameterValue></PropertyData>
+          <PropertyData property="pr1"><Data format="string">-</Data><Qualifier name="Behavior">Isotropic</Qualifier><Qualifier name="Derive from">Young's Modulus and Poisson's Ratio</Qualifier>
+            <ParameterValue parameter="pa1" format="float"><Data>3E+09</Data><Qualifier name="Variable Type">Dependent</Qualifier></ParameterValue>
+            <ParameterValue parameter="pa2" format="float"><Data>0.35</Data><Qualifier name="Variable Type">Dependent</Qualifier></ParameterValue></PropertyData>
+          <PropertyData property="pr2"><Data format="string">-</Data>
+            <ParameterValue parameter="pa3" format="float"><Data>6E+07</Data><Qualifier name="Variable Type">Dependent</Qualifier></ParameterValue></PropertyData>
+        </BulkDetails>
+      </Material>
+      <Material>
+        <BulkDetails>
+          <Name>CNT effective</Name>
+          <PropertyData property="pr0"><Data format="string">-</Data><Qualifier name="Field Variable Compatible">Temperature</Qualifier>
+            <ParameterValue parameter="pa0" format="float"><Data>1350</Data><Qualifier name="Variable Type">Dependent</Qualifier></ParameterValue></PropertyData>
+          <PropertyData property="pr1"><Data format="string">-</Data><Qualifier name="Behavior">Isotropic</Qualifier><Qualifier name="Derive from">Young's Modulus and Poisson's Ratio</Qualifier>
+            <ParameterValue parameter="pa1" format="float"><Data>1E+12</Data><Qualifier name="Variable Type">Dependent</Qualifier></ParameterValue>
+            <ParameterValue parameter="pa2" format="float"><Data>0.2</Data><Qualifier name="Variable Type">Dependent</Qualifier></ParameterValue></PropertyData>
+          <PropertyData property="pr2"><Data format="string">-</Data>
+            <ParameterValue parameter="pa3" format="float"><Data>3E+10</Data><Qualifier name="Variable Type">Dependent</Qualifier></ParameterValue></PropertyData>
+        </BulkDetails>
+      </Material>
+      <Metadata>
+        <ParameterDetails id="pa0"><Name>Density</Name><Units><Unit><Name>kg</Name></Unit><Unit power="-3"><Name>m</Name></Unit></Units></ParameterDetails>
+        <ParameterDetails id="pa1"><Name>Young's Modulus</Name><Units name="Stress"><Unit><Name>Pa</Name></Unit></Units></ParameterDetails>
+        <ParameterDetails id="pa2"><Name>Poisson's Ratio</Name><Unitless /></ParameterDetails>
+        <ParameterDetails id="pa3"><Name>Tensile Yield Strength</Name><Units name="Stress"><Unit><Name>Pa</Name></Unit></Units></ParameterDetails>
+        <PropertyDetails id="pr0"><Unitless /><Name>Density</Name></PropertyDetails>
+        <PropertyDetails id="pr1"><Unitless /><Name>Elasticity</Name></PropertyDetails>
+        <PropertyDetails id="pr2"><Unitless /><Name>Tensile Yield Strength</Name></PropertyDetails>
+      </Metadata>
+    </MatML_Doc>
+  </Materials>
+</EngineeringData>

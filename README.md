@@ -1,23 +1,8 @@
 # CNT/epoxy nanocomposite: how much stiffer?
 
-**Engineering tools:** Autodesk Fusion 360 · ANSYS Mechanical 2026 R1
+Adding 5% carbon nanotubes doubles the stiffness of epoxy. The rule of mixtures says it should be about nine times stiffer. I built a representative volume element (RVE) in Autodesk Fusion and solved it in ANSYS Mechanical to find out why.
 
-## Models and simulation files
-
-| RVE configuration | CAD geometry | Tube coordinates | FEA results |
-| --- | --- | --- | --- |
-| Plain epoxy, 0% CNT | [STEP](step/RVE_CNT_0pct.step) | [CSV](step/RVE_CNT_0pct_fibres.csv) | [JSON](results/result_RVE_CNT_0pct.json) |
-| 1.02% CNT, 6 tubes | [STEP](step/RVE_CNT_1pct.step) | [CSV](step/RVE_CNT_1pct_fibres.csv) | [JSON](results/result_RVE_CNT_1pct.json) |
-| 3.05% CNT, 18 tubes | [STEP](step/RVE_CNT_3pct.step) | [CSV](step/RVE_CNT_3pct_fibres.csv) | [JSON](results/result_RVE_CNT_3pct.json) |
-| 4.92% CNT, 29 tubes | [STEP](step/RVE_CNT_5pct.step) | [CSV](step/RVE_CNT_5pct_fibres.csv) | [JSON](results/result_RVE_CNT_5pct.json) |
-
-**Start here:** [Download, opening instructions, and file catalog](docs/CAD_GUIDE.md).
-
-[ANSYS walkthrough](media/ansys_walkthrough.mp4) · [Mesh](media/mesh_5pct.png) · [Stress contour](media/cnt_stress_5pct.png)
-
-The STEP files provide exchange geometry. A native Fusion archive (`.f3d`/`.f3z`) and native ANSYS project are not included in this repository. Supporting scripts document geometry generation and repeated solves; the method below identifies those steps.
-
-Five percent carbon nanotubes doubles the stiffness of epoxy. The rule of mixtures says it should be about nine times higher. This study finds out why, with a representative volume element (RVE) built in Autodesk Fusion and solved in ANSYS Mechanical.
+**Tools:** Autodesk Fusion 360 · ANSYS Mechanical 2026 R1
 
 ![Effective modulus vs CNT volume fraction](media/nano_modulus.png)
 
@@ -30,42 +15,72 @@ Five percent carbon nanotubes doubles the stiffness of epoxy. The rule of mixtur
 | 3.05% | 18 | 5.07 GPa | 4.86 GPa | 33.4 GPa |
 | 4.92% | 29 | 6.07 GPa | 6.06 GPa | 52.0 GPa |
 
-FEA stays within 5% of Halpin-Tsai at every fraction. The tubes are short (length 10 times the diameter), so they only carry full load near their middle. Load has to pass in from the epoxy by shear, which the stress plot below shows: low at the tube ends, highest mid-length.
+FEA stays within 5% of Halpin-Tsai at every fraction. The tubes are short (length is 10 times the diameter), so they only carry full load near their middle. Load has to pass in from the epoxy by shear, and the stress plot shows it: low at the tube ends, highest at mid-length.
 
 ![Von Mises stress in the nanotubes, 5% CNT](media/cnt_stress_5pct.png)
 
-Tube length matters more than the amount you add. At the same 5%, Halpin-Tsai gives about 22 GPa for L/d = 100.
+Tube length matters more than how much you add. At the same 5%, Halpin-Tsai gives about 22 GPa for L/d = 100.
 
 ![Modulus vs aspect ratio](media/nano_aspect.png)
 
-## Method
+## Model setup
 
-1. **Geometry (Autodesk Fusion).** `fusion/NanocompositeRVE.py` builds a 10 mm epoxy cube with aligned CNTs (solid cylinders, d = 0.6 mm, L = 6 mm) at 0, 1, 3 and 5% by volume. Tubes are placed at random with a minimum gap and no overlaps (seed 7). Each cell is exported as STEP, with tube positions in CSV.
-2. **Materials.** Epoxy E = 3 GPa, ν = 0.35. CNT treated as an effective solid, E = 1000 GPa, ν = 0.20.
-3. **FEA (ANSYS Mechanical 2026 R1).** Each tube is bonded to its hole in the epoxy (MPC contact, `ansys/bond_cnts.py`). Quadratic tetrahedra, 0.8 mm overall and 0.3 mm on the tubes. Normal displacement fixed on three origin faces, 0.01 mm (0.1% strain) applied along the tube axis on the opposite face. The reaction force gives the effective modulus E11 = F / (A · ε).
-4. **Theory.** Halpin-Tsai for aligned short fibres (ζ = 2L/d) and the rule of mixtures for continuous fibres.
+**Geometry (Autodesk Fusion)**
 
-`ansys/rve_solve.py` runs the whole case from a script. `media/ansys_walkthrough.mp4` is a screen recording of the same 5% case set up by hand in the ANSYS interface.
+- 10 mm epoxy cube with aligned CNTs modeled as solid cylinders, d = 0.6 mm, L = 6 mm
+- Four cells: 0, 1, 3 and 5% CNT by volume
+- Tubes placed at random positions with a minimum gap and no overlaps
+- Each cell exported as STEP, with tube positions recorded in CSV
+
+**Materials**
+
+| Material | E (GPa) | Poisson's ratio |
+|---|---|---|
+| Epoxy | 3 | 0.35 |
+| CNT (effective solid) | 1000 | 0.20 |
+
+**FEA (ANSYS Mechanical)**
+
+- Each tube bonded to its hole in the epoxy (MPC contact)
+- Quadratic tetrahedral mesh: 0.8 mm overall, 0.3 mm on the tubes
+- Normal displacement fixed on the three faces at the origin
+- 0.01 mm displacement (0.1% strain) applied along the tube axis on the opposite face
+- Effective modulus from the reaction force: E11 = F / (A · ε)
+
+![Mesh, 5% CNT](media/mesh_5pct.png)
+
+**Theory for comparison**
+
+- Halpin-Tsai for aligned short fibres, with ζ = 2L/d
+- Rule of mixtures for continuous fibres
 
 ## Checks
 
-- Plain epoxy cell returns 3.000 GPa, the input value, with uniform stress.
-- Mesh refinement (65k to 97k nodes) moves the 5% result by 0.8%.
-- All 29 tubes bonded: every tube face matched to its hole. An early run without bonded contact gave 2.84 GPa, softer than epoxy, which is how the missing contact was caught.
-- The hand-built ANSYS model (video) gives 603.8 N reaction force, E = 6.04 GPa, matching the scripted run.
+- The plain epoxy cell returns 3.000 GPa, the input value, with uniform stress.
+- Mesh refinement from 65k to 97k nodes moves the 5% result by 0.8%.
+- All 29 tubes bonded, with every tube face matched to its hole. An early run without bonded contact gave 2.84 GPa, softer than plain epoxy, which is how I caught the missing contact.
+- The 5% case set up again from scratch in the ANSYS interface (see the walkthrough video) gives a 603.8 N reaction force and E = 6.04 GPa, matching the original run.
 
-## Limits
+## Limitations
 
-Tubes are aligned, straight and perfectly bonded, so these are upper-bound stiffnesses for this geometry. Random orientation, waviness and a weak interface would all lower them. Next steps: randomly oriented tubes and a cohesive interface.
+The tubes are aligned, straight and perfectly bonded, so these are upper-bound stiffnesses for this geometry. Random orientation, waviness and a weak interface would all lower them. Next steps would be randomly oriented tubes and a cohesive interface.
 
 ## Files
 
-```
-fusion/   Fusion API scripts (RVE generator, material assignment)
-ansys/    Mechanical scripts and material data
-step/     RVE geometry (STEP), tube positions, theory values
-results/  FEA results per case (JSON)
-media/    plots, stress images, walkthrough video
-```
+| File | What it is |
+|---|---|
+| [step/RVE_CNT_0pct.step](step/RVE_CNT_0pct.step) | Plain epoxy cell |
+| [step/RVE_CNT_1pct.step](step/RVE_CNT_1pct.step) | 1.02% CNT, 6 tubes |
+| [step/RVE_CNT_3pct.step](step/RVE_CNT_3pct.step) | 3.05% CNT, 18 tubes |
+| [step/RVE_CNT_5pct.step](step/RVE_CNT_5pct.step) | 4.92% CNT, 29 tubes |
+| [step/](step/) `*_fibres.csv` | Tube positions for each cell |
+| [ansys/materials.xml](ansys/materials.xml) | Epoxy and CNT material data |
+| [results/results.csv](results/results.csv) | FEA results for each cell, including the fine-mesh run |
+| [step/theory.csv](step/theory.csv) | Halpin-Tsai and rule of mixtures values |
+| [media/ansys_walkthrough.mp4](media/ansys_walkthrough.mp4) | Screen recording of the 5% case set up in ANSYS |
+
+To download everything, use **Code → Download ZIP**.
+
+---
 
 Sai Phanidhar Ammiraju · [Portfolio](https://saiphani02.github.io/nanocomposite.html) · [LinkedIn](https://www.linkedin.com/in/sai-ammiraju)

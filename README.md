@@ -2,13 +2,20 @@
 
 **Engineering tools:** Autodesk Fusion 360 · ANSYS Mechanical 2026 R1
 
-## CAD and simulation deliverables
+## Models and simulation files
 
-- [RVE CAD geometry (STEP)](step/) for the four CNT volume fractions; open these models in Fusion 360 or import them into ANSYS.
-- [ANSYS setup walkthrough](media/ansys_walkthrough.mp4) showing the 5% case assembled in the Mechanical interface.
-- [Mesh image](media/mesh_5pct.png), [CNT stress contour](media/cnt_stress_5pct.png), and [numerical results](results/).
+| RVE configuration | CAD geometry | Tube coordinates | FEA results |
+| --- | --- | --- | --- |
+| Plain epoxy, 0% CNT | [STEP](step/RVE_CNT_0pct.step) | [CSV](step/RVE_CNT_0pct_fibres.csv) | [JSON](results/result_RVE_CNT_0pct.json) |
+| 1.02% CNT, 6 tubes | [STEP](step/RVE_CNT_1pct.step) | [CSV](step/RVE_CNT_1pct_fibres.csv) | [JSON](results/result_RVE_CNT_1pct.json) |
+| 3.05% CNT, 18 tubes | [STEP](step/RVE_CNT_3pct.step) | [CSV](step/RVE_CNT_3pct_fibres.csv) | [JSON](results/result_RVE_CNT_3pct.json) |
+| 4.92% CNT, 29 tubes | [STEP](step/RVE_CNT_5pct.step) | [CSV](step/RVE_CNT_5pct_fibres.csv) | [JSON](results/result_RVE_CNT_5pct.json) |
 
-The workflow covers RVE geometry, material properties, bonded interfaces, meshing, boundary conditions, and effective stiffness evaluation. Supporting Python scripts automate geometry creation and repeated solves; the method below identifies those steps.
+**Start here:** [Download, opening instructions, and file catalog](docs/CAD_GUIDE.md).
+
+[ANSYS walkthrough](media/ansys_walkthrough.mp4) · [Mesh](media/mesh_5pct.png) · [Stress contour](media/cnt_stress_5pct.png)
+
+The STEP files provide exchange geometry. A native Fusion archive (`.f3d`/`.f3z`) and native ANSYS project are not included in this repository. Supporting scripts document geometry generation and repeated solves; the method below identifies those steps.
 
 Five percent carbon nanotubes doubles the stiffness of epoxy. The rule of mixtures says it should be about nine times higher. This study finds out why, with a representative volume element (RVE) built in Autodesk Fusion and solved in ANSYS Mechanical.
 

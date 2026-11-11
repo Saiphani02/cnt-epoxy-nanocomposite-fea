@@ -1,5 +1,15 @@
 # CNT/epoxy nanocomposite: how much stiffer?
 
+**Engineering tools:** Autodesk Fusion 360 · ANSYS Mechanical 2026 R1
+
+## CAD and simulation deliverables
+
+- [RVE CAD geometry (STEP)](step/) for the four CNT volume fractions; open these models in Fusion 360 or import them into ANSYS.
+- [ANSYS setup walkthrough](media/ansys_walkthrough.mp4) showing the 5% case assembled in the Mechanical interface.
+- [Mesh image](media/mesh_5pct.png), [CNT stress contour](media/cnt_stress_5pct.png), and [numerical results](results/).
+
+The workflow covers RVE geometry, material properties, bonded interfaces, meshing, boundary conditions, and effective stiffness evaluation. Supporting Python scripts automate geometry creation and repeated solves; the method below identifies those steps.
+
 Five percent carbon nanotubes doubles the stiffness of epoxy. The rule of mixtures says it should be about nine times higher. This study finds out why, with a representative volume element (RVE) built in Autodesk Fusion and solved in ANSYS Mechanical.
 
 ![Effective modulus vs CNT volume fraction](media/nano_modulus.png)
